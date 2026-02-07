@@ -33,7 +33,15 @@ export default function SignInPage() {
         className="space-y-8"
       >
         {/* Description */}
-        <div className="text-center"></div>
+        <div className="text-center space-y-2">
+          <h2 className="text-xl font-semibold text-foreground">
+            Your AI assistant for WhatsApp, email & calendar
+          </h2>
+          <p className="text-sm text-muted-foreground">
+            Set rules once. AiRA follows them 24/7 so you stay in control
+            without the noise.
+          </p>
+        </div>
 
         {/* OAuth Buttons */}
         <OAuthButtons
