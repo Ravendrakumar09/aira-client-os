@@ -23,6 +23,7 @@ import {
 } from '@repo/core';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
+import { useToast } from '@/components/ui/toast';
 
 const TABS = [
   { id: 'rules', label: 'Rules' },
@@ -55,6 +56,7 @@ export default function WorkspacePage() {
   const [showDisconnectDialog, setShowDisconnectDialog] = React.useState<
     string | null
   >(null);
+  const { showToast } = useToast();
 
   const { mutate: wahaDisconnect, isPending: isDisconnecting } =
     useWahaDisconnect();
@@ -173,8 +175,8 @@ export default function WorkspacePage() {
                 window.location.href = data.redirect_url;
               }
             },
-            onError: error => {
-              console.error('Failed to connect:', error);
+            onError: () => {
+              showToast('Failed to connect. Please try again.', 'error');
               setConnectingId(null);
             },
           },

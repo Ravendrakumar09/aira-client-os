@@ -20,6 +20,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { useToast } from '@/components/ui/toast';
 import { useLogout, useDeleteAccount } from '@repo/core';
 
 interface UserMenuProps {
@@ -35,6 +36,7 @@ export function UserMenu({
 }: UserMenuProps) {
   const router = useRouter();
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const { showToast } = useToast();
 
   const { mutate: logout, isPending: isLoggingOut } = useLogout();
   const { mutate: deleteAccount, isPending: isDeleting } = useDeleteAccount();
@@ -44,11 +46,11 @@ export function UserMenu({
       onSuccess: () => {
         router.push('/signin');
       },
-      onError: error => {
-        console.error('Logout failed:', error);
+      onError: () => {
+        showToast('Logout failed. Please try again.', 'error');
       },
     });
-  }, [logout, router]);
+  }, [logout, router, showToast]);
 
   const handleDeleteAccount = useCallback(() => {
     deleteAccount(undefined, {
@@ -56,11 +58,11 @@ export function UserMenu({
         setShowDeleteDialog(false);
         router.push('/signin');
       },
-      onError: error => {
-        console.error('Delete account failed:', error);
+      onError: () => {
+        showToast('Failed to delete account. Please try again.', 'error');
       },
     });
-  }, [deleteAccount, router]);
+  }, [deleteAccount, router, showToast]);
 
   return (
     <>

@@ -7,6 +7,7 @@ import { LogOut } from 'lucide-react';
 import { AuthLayout } from '@/components/layout';
 import { PhoneInput, AssistantAvatar } from '@/components/auth';
 import { Button } from '@/components/ui/button';
+import { useToast } from '@/components/ui/toast';
 import { useUpdateUser, useAuthActions, queryClient } from '@repo/core';
 import { webTokenStorage } from '@/lib/api';
 import { ROUTES } from '@/lib/constants';
@@ -14,6 +15,7 @@ import { ROUTES } from '@/lib/constants';
 export default function PhonePage() {
   const router = useRouter();
   const [phone, setPhone] = useState('');
+  const { showToast } = useToast();
   const { mutate: updateUser, isPending: isUpdating } = useUpdateUser();
   const { logout } = useAuthActions();
 
@@ -40,8 +42,8 @@ export default function PhonePage() {
           // User is now active, redirect to hub
           router.replace(ROUTES.HUB);
         },
-        onError: error => {
-          console.error('Failed to update phone number:', error);
+        onError: () => {
+          showToast('Failed to save phone number. Please try again.', 'error');
         },
       },
     );

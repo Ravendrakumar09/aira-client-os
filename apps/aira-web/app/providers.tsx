@@ -3,6 +3,7 @@
 import { useEffect } from 'react';
 import { QueryClientProvider, queryClient } from '@repo/core';
 import { verifyAuthState } from '@/lib/api';
+import { ToastProvider } from '@/components/ui/toast';
 
 // Initialize API client on module load
 import '@/lib/api';
@@ -19,6 +20,8 @@ export function Providers({ children }: ProvidersProps) {
   }, []);
 
   return (
-    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    <QueryClientProvider client={queryClient}>
+      <ToastProvider>{children}</ToastProvider>
+    </QueryClientProvider>
   );
 }

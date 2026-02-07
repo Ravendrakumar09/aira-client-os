@@ -7,6 +7,7 @@ import { ArrowLeft } from 'lucide-react';
 import { AuthLayout } from '@/components/layout';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { useToast } from '@/components/ui/toast';
 import { useUpdateUser } from '@repo/core';
 import { ROUTES } from '@/lib/constants';
 
@@ -15,6 +16,7 @@ const MAX_NAME_LENGTH = 50;
 export default function NamePage() {
   const router = useRouter();
   const [name, setName] = useState('');
+  const { showToast } = useToast();
   const { mutate: updateUser, isPending: isUpdating } = useUpdateUser();
 
   const handleContinue = async () => {
@@ -31,8 +33,8 @@ export default function NamePage() {
         onSuccess: () => {
           router.push(ROUTES.HUB);
         },
-        onError: error => {
-          console.error('Failed to update name:', error);
+        onError: () => {
+          showToast('Failed to save name. Please try again.', 'error');
         },
       },
     );

@@ -20,6 +20,7 @@ import {
   type Suggestion,
 } from '@repo/core';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useToast } from '@/components/ui/toast';
 import { ROUTES } from '@/lib/constants';
 
 function formatRelativeTime(dateString: string): string {
@@ -65,6 +66,7 @@ export default function HubPage() {
 
   // Delete suggestion mutation
   const { mutate: deleteSuggestion } = useDeleteSuggestion();
+  const { showToast } = useToast();
 
   // Transform API tasks to CardData format (matching mobile app)
   const cards: CardData[] = useMemo(() => {
@@ -154,13 +156,13 @@ export default function HubPage() {
           onSuccess: () => {
             console.log('Task submitted:', taskId);
           },
-          onError: error => {
-            console.error('Failed to submit task:', error);
+          onError: () => {
+            showToast('Failed to send reply. Please try again.', 'error');
           },
         },
       );
     },
-    [submitTask],
+    [submitTask, showToast],
   );
 
   // Handle tab change — persist in URL so it survives navigation
@@ -189,12 +191,12 @@ export default function HubPage() {
     (suggestionId: string) => {
       setDismissedSuggestionIds(prev => new Set(prev).add(suggestionId));
       deleteSuggestion(suggestionId, {
-        onError: error => {
-          console.error('Failed to delete suggestion:', error);
+        onError: () => {
+          showToast('Failed to dismiss suggestion. Please try again.', 'error');
         },
       });
     },
-    [deleteSuggestion],
+    [deleteSuggestion, showToast],
   );
 
   // Handle send-to-back (right swipe) — move to end of local order
