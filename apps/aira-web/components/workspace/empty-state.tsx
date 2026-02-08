@@ -26,7 +26,7 @@ export function EmptyState({ type, className }: EmptyStateProps) {
       title: 'No connectors',
       description: 'Connect your first service to enable automations',
       action: 'View Connectors',
-      href: ROUTES.WORKSPACE,
+      href: `${ROUTES.WORKSPACE}?tab=connectors`,
     },
   };
 
